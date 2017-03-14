@@ -12,18 +12,17 @@ namespace FakeTrello.DAL
         public FakeTrelloContext Context { get; set; }
         //private FakeTrelloContext context; // Data member
 
-        public FakeTrelloRepository()
+        public FakeTrelloRepository() //done
         {
             Context = new FakeTrelloContext();
         }
 
-        public FakeTrelloRepository(FakeTrelloContext context)
+        public FakeTrelloRepository(FakeTrelloContext context) //done
         {
             Context = context;
         }
 
-
-        public void AddBoard(string name, ApplicationUser owner)
+        public void AddBoard(string name, ApplicationUser owner) //done
         {
             Board board = new Board { Name = name, Owner = owner };
             Context.Boards.Add(board);
@@ -60,7 +59,7 @@ namespace FakeTrello.DAL
             throw new NotImplementedException();
         }
 
-        public Board GetBoard(int boardId)
+        public Board GetBoard(int boardId) //done
         {
             // SELECT * FROM Boards WHERE BoardId == boardId 
             Board found_board = Context.Boards.FirstOrDefault(b => b.BoardId == boardId); // returns null if nothing is found
@@ -76,9 +75,9 @@ namespace FakeTrello.DAL
              */
         }
 
-        public List<Board> GetBoardsFromUser(string userId)
+        public List<Board> GetBoardsFromUser(string userId) //done
         {
-            throw new NotImplementedException();
+            return Context.Boards.Where(b => b.Owner.Id == userId).ToList<Board>();
         }
 
         public Card GetCard(int cardId)
@@ -116,9 +115,16 @@ namespace FakeTrello.DAL
             throw new NotImplementedException();
         }
 
-        public bool RemoveBoard(int boardId)
+        public bool RemoveBoard(int boardId) //done
         {
-            throw new NotImplementedException();
+            Board foundBoard = GetBoard(boardId);
+            if (foundBoard != null)
+            {
+                Context.Boards.Remove(foundBoard);
+                Context.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
         public bool RemoveCard(int cardId)
